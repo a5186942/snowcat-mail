@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.snowcat.mapper.TbItemMapper">
+
+
+    <update id="change" >
+        update tbitem set status = #{status}
+        <where>
+            <foreach collection="tbItem" item="item" separator="," open="id in(" close=")">
+               #{item.id}
+            </foreach>
+        </where>
+    </update >
+
+    <select id="searchItem" resultType="com.snowcat.pojo.TbItem">
+        select *from tbitem
+        <where>
+            price >= #{minPrice}
+            <if test="title!=null">
+                and title like '%${title}%'
+            </if>
+
+            <if test="maxPrice!=null">
+                and price &lt;= #{maxPrice}
+            </if>
+            <if test="cid!=null">
+                and cid = #{cid}
+            </if>
+        </where>
+        limit (#{index},#{limit})
+
+    </select>
+
+    <select id="searchItemByCount">
+        select count(*)from tbitem
+        <where>
+            price >= #{minPrice}
+            <if test="title!=null">
+                and title like '%${title}%'
+            </if>
+
+             <if test="maxPrice!=null">
+            and price &lt;= #{maxPrice}
+            </if>
+            <if test="cid!=null">
+                and cid = #{cid}
+            </if>
+        </where>
+
+    </select>
+
+
+
+
+
+</mapper>

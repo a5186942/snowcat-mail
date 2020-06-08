@@ -9,11 +9,26 @@ import java.util.List;
 
 public interface TbItemMapper {
 
-    @Select("select * from tbitem where id = #{id}")
+    @Select("select * from tbitem where id = #{itemId}")
     TbItem findTbItemById(Long itemId);
     @Select("select count(*) from tbitem")
     int findTbItemByCount();
 
     @Select("select * from tbitem limit #{index},#{pageSize} ")
     List<TbItem> findTbItemByPage(@Param("index") int index, @Param("pageSize") int pageSize);
+
+//    @Update("update tbitem set status = 3 where id = #{id}")
+//    int deleteById(@Param("id") Long id);
+
+    int change(@Param("tbItem") List<TbItem> tbItem,int status);
+
+//    int commitUpper(@Param("tbItem") List<TbItem> tbItem);
+//
+//    int commitLower(@Param("tbItem") List<TbItem> tbItem);
+
+    List<TbItem> searchItem(@Param("index") Integer index ,@Param("limit") Integer limt,@Param("title") String title , @Param("minPrice") Long minPrice,@Param("maxPrice") Long maxPrice,@Param("cid") Long cid);
+    int searchItemByCount(@Param("title") String title , @Param("minPrice") Long minPrice,@Param("maxPrice") Long maxPrice,@Param("cid") Long cid);
+
+
+
 }

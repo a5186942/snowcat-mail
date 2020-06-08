@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>淘淘商城后台</title>
+<title>雪猫商城后台</title>
 <style type="text/css">
 body, html, #allmap {
 	width: 100%;
@@ -28,7 +28,7 @@ body, html, #allmap {
 <body class="layui-layout-body">
 	<div class="layui-layout layui-layout-admin">
 		<div class="layui-header">
-			<div class="layui-logo">淘淘商城后台</div>
+			<div class="layui-logo">雪猫商城后台</div>
 			<!-- 头部区域（可配合layui已有的水平导航） -->
 
 			<ul class="layui-nav layui-layout-right">
@@ -209,7 +209,7 @@ body, html, #allmap {
 		</div>
 
 		<div class="layui-footer" style="background-color: #2F4056">
-			<span style="color: #01AAED">©www.clive.com - 淘淘商城</span>
+			<span style="color: #01AAED">©www.clive.com - 雪猫商城</span>
 		</div>
 	</div>
 	<script type="text/javascript">
