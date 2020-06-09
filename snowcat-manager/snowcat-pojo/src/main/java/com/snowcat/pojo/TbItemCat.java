@@ -1,11 +1,10 @@
 package com.snowcat.pojo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 
 import java.io.Serializable;
 import java.util.Date;
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class TbItemCat implements Serializable{
     private Long id;
 

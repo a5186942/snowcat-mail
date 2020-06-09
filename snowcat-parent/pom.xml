@@ -41,6 +41,7 @@
         <activemq.version>5.11.2</activemq.version>
         <freemarker.version>2.3.23</freemarker.version>
         <quartz.version>2.2.2</quartz.version>
+        <oss.version>3.5.0</oss.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -73,11 +74,11 @@
                 <version>${jackson.version}</version>
             </dependency>
             <!-- httpclient -->
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.httpcomponents</groupId>-->
+<!--                <artifactId>httpclient</artifactId>-->
+<!--                <version>${httpclient.version}</version>-->
+<!--            </dependency>-->
             <!-- quartz任务调度框架 -->
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
@@ -224,6 +225,13 @@
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${oss.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

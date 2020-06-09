@@ -18,4 +18,5 @@ public interface ItemService {
     LayuiResult searchItem(Integer page,Integer limit ,String title , Long minPrice,Long maxPrice,Long cid);
 
 
+    PicResult fileUpload(String fileNanme,byte[] bytes);
 }

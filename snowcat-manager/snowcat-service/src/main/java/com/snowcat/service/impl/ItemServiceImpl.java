@@ -1,13 +1,22 @@
 package com.snowcat.service.impl;
 
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 import com.snowcat.mapper.TbItemMapper;
 import com.snowcat.pojo.*;
 import com.snowcat.service.ItemService;
+import com.snowcat.utils.IDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -127,6 +136,42 @@ public class ItemServiceImpl implements ItemService {
 
 
         return layuiResult;
+    }
+
+    @Override
+    public PicResult fileUpload(String name,byte[] bytes) {
+        String fileName = IDUtils.genImageName()+name.substring(name.lastIndexOf("."));
+        Properties properties = new Properties();
+        try {
+            FileInputStream fileInputStream = new FileInputStream("D:\\aliyun.txt");
+            properties.load(fileInputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String endPoint = properties.getProperty("endPoint");
+        String accessKeyId = properties.getProperty("accessKeyId");
+        String accessKeySecret = properties.getProperty("accessKeySecret");
+        String bucketName = properties.getProperty("bucketName");
+        String objectName = properties.getProperty("objectName");
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+
+        OSS client = new OSSClientBuilder().build(endPoint, accessKeyId, accessKeySecret);
+        client.putObject(bucketName,objectName+fileName,byteArrayInputStream);
+
+        PicResult picResult = new PicResult();
+        picResult.setCode(200);
+        picResult.setMsg("");
+        PicUrl picUrl = new PicUrl();
+        picUrl.setUrl("https://"+bucketName+".oss-cn-chengdu.aliyuncs.com/"+objectName+fileName);
+        picResult.setPicUrl(picUrl);
+
+        return picResult;
+
+
+
     }
 
 

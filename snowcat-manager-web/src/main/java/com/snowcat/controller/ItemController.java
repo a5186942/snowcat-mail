@@ -5,7 +5,10 @@ import com.snowcat.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -52,6 +55,22 @@ public class ItemController {
     public LayuiResult searchUItem(Integer page,Integer limit,String title , Long minPrice,Long maxPrice,Long cid){
         LayuiResult layuiResult = itemService.searchItem(page,limit,title,minPrice,maxPrice,cid);
         return layuiResult;
+    }
+
+    @RequestMapping("/fileUpload")
+    @ResponseBody
+    public PicResult fileUpload(MultipartFile file){
+
+        try {
+            byte[] bytes = file.getBytes();
+            String fileName = file.getOriginalFilename();
+            PicResult picResult = itemService.fileUpload(fileName,bytes);
+            return  picResult;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
 }
