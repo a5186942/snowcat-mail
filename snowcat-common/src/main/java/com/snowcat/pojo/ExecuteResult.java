@@ -1,9 +1,20 @@
 package com.snowcat.pojo;
 
-public class ExecuteResult {
-    private int status;
+import java.io.Serializable;
+
+public class ExecuteResult implements Serializable {
+    private Integer status;
     private String msg;
     private Object data;
+
+    public ExecuteResult() {
+    }
+
+    public ExecuteResult(Integer status, String msg, Object data) {
+        this.status = status;
+        this.msg = msg;
+        this.data = data;
+    }
 
     @Override
     public String toString() {
@@ -12,6 +23,9 @@ public class ExecuteResult {
                 ", msg='" + msg + '\'' +
                 ", data=" + data +
                 '}';
+    }
+    public static ExecuteResult build(Integer status,String msg){
+            return new ExecuteResult(status,msg,null);
     }
 
     public int getStatus() {

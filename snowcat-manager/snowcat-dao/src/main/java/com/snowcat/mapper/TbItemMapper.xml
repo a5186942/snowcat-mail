@@ -7,7 +7,7 @@
 
 
     <update id="change" >
-        update tbitem set status = #{status}
+        update tbitem set status = #{status},updated = #{date}
         <where>
             <foreach collection="tbItem" item="item" separator="," open="id in(" close=")">
                #{item.id}
@@ -18,39 +18,43 @@
     <select id="searchItem" resultType="com.snowcat.pojo.TbItem">
         select *from tbitem
         <where>
-            price >= #{minPrice}
+            price >= #{priceMin}
             <if test="title!=null">
                 and title like '%${title}%'
             </if>
 
-            <if test="maxPrice!=null">
-                and price &lt;= #{maxPrice}
+            <if test="priceMax!=null">
+                and price &lt;= #{priceMax}
             </if>
-            <if test="cid!=null">
-                and cid = #{cid}
+            <if test="cId!=null">
+                and cId = #{cId}
             </if>
         </where>
-        limit (#{index},#{limit})
+        limit  #{index},#{limit}
 
     </select>
 
-    <select id="searchItemByCount">
+    <select id="searchItemByCount" resultType="int">
         select count(*)from tbitem
         <where>
-            price >= #{minPrice}
+            price >= #{priceMin}
             <if test="title!=null">
                 and title like '%${title}%'
             </if>
 
-             <if test="maxPrice!=null">
-            and price &lt;= #{maxPrice}
+             <if test="priceMax!=null">
+            and price &lt;= #{priceMax}
             </if>
-            <if test="cid!=null">
-                and cid = #{cid}
+            <if test="cId!=null">
+                and cId = #{cId}
             </if>
         </where>
 
     </select>
+
+    <insert id="addItem">
+        insert into tbitem (id,cId,title,sellpoint,price,num,barcode,image,status,created,updated) values (#{id},#{cId},#{title},#{sellPoint},#{price},#{num},#{barcode},#{image},#{status},#{created},#{updated})
+    </insert>
 
 
 

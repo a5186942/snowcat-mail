@@ -15,8 +15,10 @@ public interface ItemService {
 
     ExecuteResult commitLower(List<TbItem> tbItem);
 
-    LayuiResult searchItem(Integer page,Integer limit ,String title , Long minPrice,Long maxPrice,Long cid);
+    LayuiResult searchItem(Integer page,Integer limit ,String title , Long priceMin,Long priceMax,Long cid);
 
 
-    PicResult fileUpload(String fileNanme,byte[] bytes);
+    ExecuteResult fileUpload(String fileNanme,byte[] bytes);
+
+    ExecuteResult addItem(TbItem tbItem);
 }

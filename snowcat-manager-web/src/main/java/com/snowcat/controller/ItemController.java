@@ -52,25 +52,32 @@ public class ItemController {
 
     @RequestMapping("/searchItem")
     @ResponseBody
-    public LayuiResult searchUItem(Integer page,Integer limit,String title , Long minPrice,Long maxPrice,Long cid){
-        LayuiResult layuiResult = itemService.searchItem(page,limit,title,minPrice,maxPrice,cid);
+    public LayuiResult searchUItem(Integer page,Integer limit,String title , Long priceMin,Long priceMax,Long cid){
+        LayuiResult layuiResult = itemService.searchItem(page,limit,title,priceMin,priceMax,cid);
         return layuiResult;
     }
 
     @RequestMapping("/fileUpload")
     @ResponseBody
-    public PicResult fileUpload(MultipartFile file){
+    public ExecuteResult fileUpload(MultipartFile file){
 
         try {
             byte[] bytes = file.getBytes();
             String fileName = file.getOriginalFilename();
-            PicResult picResult = itemService.fileUpload(fileName,bytes);
-            return  picResult;
+            ExecuteResult executeResult = itemService.fileUpload(fileName,bytes);
+            return executeResult;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
 
+    }
+
+    @RequestMapping("/addItem")
+    @ResponseBody
+    public ExecuteResult addItem(TbItem tbItem){
+        ExecuteResult executeResult =  itemService.addItem(tbItem);
+        return executeResult;
     }
 
 }

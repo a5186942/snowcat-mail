@@ -14,7 +14,10 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -47,8 +50,11 @@ public class ItemServiceImpl implements ItemService {
         ExecuteResult executeResult = new ExecuteResult();
         executeResult.setData(null);
         int status = 3;
-        int count  =  tbItemMapper.change(tbItem,status);
-
+        Date date = new Date();
+        int count  =  tbItemMapper.change(tbItem,status,date);
+//        for(TbItem item:tbItem){
+//            item.setUpdated(new Date());
+//        }
         if(count!=tbItem.size()||tbItem.size()==0){
             executeResult.setStatus(400);
             executeResult.setMsg("删除失败");
@@ -67,8 +73,11 @@ public class ItemServiceImpl implements ItemService {
         ExecuteResult executeResult = new ExecuteResult();
         executeResult.setData(null);
         int status = 1;
-        int count  =  tbItemMapper.change(tbItem,status);
-
+        Date date = new Date();
+        int count  =  tbItemMapper.change(tbItem,status,date);
+//        for(TbItem item:tbItem){
+//            item.setUpdated(new Date());
+//        }
         if(count!=tbItem.size()||tbItem.size()==0){
             executeResult.setStatus(400);
             executeResult.setMsg("上架失败");
@@ -89,7 +98,11 @@ public class ItemServiceImpl implements ItemService {
         ExecuteResult executeResult = new ExecuteResult();
         executeResult.setData(null);
         int status = 2;
-        int count  =  tbItemMapper.change(tbItem,status);
+//        for(TbItem item:tbItem){
+//            item.setUpdated(new Date());
+//        }
+        Date date = new Date();
+        int count  =  tbItemMapper.change(tbItem,status,date);
 
         if(count!=tbItem.size()||tbItem.size()==0){
             executeResult.setStatus(400);
@@ -105,19 +118,19 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public LayuiResult searchItem(Integer page,Integer limit,String title , Long minPrice,Long maxPrice,Long cid) {
+    public LayuiResult searchItem(Integer page,Integer limit,String title , Long priceMin,Long priceMax,Long cid) {
         LayuiResult layuiResult = new LayuiResult();
-        if (minPrice == null) {
-            minPrice = 0L;
+        if (priceMin == null) {
+            priceMin = 0L;
         }
 
-        List<TbItem> list = tbItemMapper.searchItem((page-1)*limit,limit,title, minPrice, maxPrice, cid);
-        int count = tbItemMapper.searchItemByCount(title, minPrice, maxPrice, cid);
+        List<TbItem> list = tbItemMapper.searchItem((page-1)*limit,limit,title, priceMin, priceMax, cid);
+        int count = tbItemMapper.searchItemByCount(title, priceMin, priceMax, cid);
 
         if (list != null) {
             int size = list.size();
             if (size <= 0) {
-                layuiResult.setCode(400);
+                layuiResult.setCode(0);
                 layuiResult.setMsg("查询不到商品");
                 layuiResult.setCount(0);
                 return layuiResult;
@@ -127,7 +140,7 @@ public class ItemServiceImpl implements ItemService {
             layuiResult.setData(list);
 
 
-            layuiResult.setCode(200);
+            layuiResult.setCode(0);
             layuiResult.setMsg("查询成功");
             layuiResult.setCount(count);
         }
@@ -139,7 +152,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public PicResult fileUpload(String name,byte[] bytes) {
+    public ExecuteResult fileUpload(String name,byte[] bytes) {
         String fileName = IDUtils.genImageName()+name.substring(name.lastIndexOf("."));
         Properties properties = new Properties();
         try {
@@ -161,14 +174,32 @@ public class ItemServiceImpl implements ItemService {
         OSS client = new OSSClientBuilder().build(endPoint, accessKeyId, accessKeySecret);
         client.putObject(bucketName,objectName+fileName,byteArrayInputStream);
 
-        PicResult picResult = new PicResult();
-        picResult.setCode(200);
-        picResult.setMsg("");
+        ExecuteResult executeResult = new ExecuteResult();
+        executeResult.setStatus(200);
+        executeResult.setMsg("");
         PicUrl picUrl = new PicUrl();
-        picUrl.setUrl("https://"+bucketName+".oss-cn-chengdu.aliyuncs.com/"+objectName+fileName);
-        picResult.setPicUrl(picUrl);
+        picUrl.setSrc("https://"+bucketName+".oss-cn-chengdu.aliyuncs.com/"+objectName+fileName);
+        executeResult.setData(picUrl);
 
-        return picResult;
+        return executeResult;
+
+
+
+    }
+
+    @Override
+    public ExecuteResult addItem(TbItem tbItem) {
+        tbItem.setCreated(new Date());
+        tbItem.setUpdated(new Date());
+        tbItem.setStatus((byte)1);
+        long itemId = IDUtils.genItemId();
+        tbItem.setId(itemId);
+        int count = tbItemMapper.addItem(tbItem);
+
+        if(count<=0){
+            return ExecuteResult.build(400,"添加失败");
+        }
+        return ExecuteResult.build(200,"添加成功");
 
 
 
