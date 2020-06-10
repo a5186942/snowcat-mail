@@ -9,6 +9,23 @@ public class LayuiResult implements Serializable {
     private int count;
     List<?> data;
 
+
+    public static LayuiResult build(int code,String msg){
+       LayuiResult layuiResult =  new LayuiResult(code,msg);
+       layuiResult.setCount(0);
+       layuiResult.setData(null);
+       return layuiResult;
+    }
+
+    public LayuiResult() {
+    }
+
+
+    public LayuiResult(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
     @Override
     public String toString() {
         return "LayuiResult{" +

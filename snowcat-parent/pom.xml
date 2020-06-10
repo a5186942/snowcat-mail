@@ -12,6 +12,8 @@
         <module>../snowcat-common</module>
         <module>../snowcat-manager</module>
         <module>../snowcat-manager-web</module>
+        <module>../snowcat-portal-web</module>
+        <module>../snowcat-content</module>
     </modules>
     <properties>
         <junit.version>4.12</junit.version>
