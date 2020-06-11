@@ -7,8 +7,11 @@ import com.snowcat.pojo.ElementResult;
 import com.snowcat.pojo.LayuiResult;
 import com.snowcat.pojo.TbContent;
 import com.snowcat.service.ContentService;
+import com.snowcat.service.JedisClient;
+import com.snowcat.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -20,6 +23,9 @@ public class ContentServiceImpl implements ContentService {
 
     @Autowired
     TbContentMapper tbContentMapper;
+
+    @Autowired
+    JedisClient jedisClient;
 
     @Override
     public List<ContentZtreeResult> showList(Long id) {
@@ -45,20 +51,25 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public LayuiResult deleteContent(List<Long> id) {
+    public LayuiResult deleteContent(List<Long> ids) {
         LayuiResult layuiResult = new LayuiResult();
         layuiResult.setCode(0);
         layuiResult.setData(null);
         layuiResult.setCount(0);
 
-        if(id==null || id.size()==0){
+        if(ids==null || ids.size()==0){
 
             layuiResult.setMsg("删除失败");
 
             return layuiResult;
         }
-         tbContentMapper.deleteContent(id);
+        int count = tbContentMapper.deleteContents(ids);
+        if(count<=0){
+            layuiResult.setMsg("删除成功");
+            return layuiResult;
+        }
         layuiResult.setMsg("删除成功");
+        jedisClient.hdel("CONTENT_KEY",ids.toString());
 
         return layuiResult;
 
@@ -67,15 +78,23 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public ElementResult showElement(Long categoryId) {
+    public List<TbContent> showElement(Long categoryId) {
 
-        TbContent tbContent = tbContentMapper.showElement(categoryId);
-        ElementResult elementResult = new ElementResult();
-        elementResult.setAlt(tbContent.getTitle());
-        elementResult.setSrc(tbContent.getPic());
-        elementResult.setSrcB(tbContent.getPic2());
-        elementResult.setHref(tbContent.getUrl());
-        return elementResult;
+        String key = jedisClient.hget("CONTENT_KEY", categoryId + "");
+        if(key!=null&&key!=""){
+            List<TbContent> list = JsonUtils.jsonToList(key, TbContent.class);
+
+            return list;
+
+
+        }
+        List<TbContent> list = tbContentMapper.showElement(categoryId);
+
+
+        jedisClient.hset("CONTENT_KEY",categoryId+"",JsonUtils.objectToJson(list));
+
+
+        return list;
     }
 
     @Override
@@ -91,6 +110,7 @@ public class ContentServiceImpl implements ContentService {
         if(count <= 0){
             return LayuiResult.build(500,"添加失败");
         }
+        jedisClient.hdel("CONTENT_KEY",tbContent.getCategoryId().toString());
         return LayuiResult.build(200,"增加成功");
 
 

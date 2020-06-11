@@ -12,6 +12,16 @@ public class ElementResult implements Serializable {
     private String href;
     private Integer heightB = 240;
 
+    public ElementResult(String srcB, String alt, String src, String href) {
+        this.srcB = srcB;
+        this.alt = alt;
+        this.src = src;
+        this.href = href;
+    }
+
+    public ElementResult() {
+    }
+
     @Override
     public String toString() {
         return "ElementResult{" +

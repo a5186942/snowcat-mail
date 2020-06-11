@@ -31,11 +31,11 @@
     <mvc:resources mapping="/js/**" location="/js/"></mvc:resources>
     <mvc:resources mapping="/images/**" location="/images/"></mvc:resources>
 
-    <dubbo:application name="snowcat-manager-web"/>
+    <dubbo:application name="snowcat-portal-web"/>
     <dubbo:registry protocol="zookeeper" address="192.168.17.100:2181"/>
 <!--    <dubbo:reference interface="com.snowcat.service.ItemService" id="itemService" />-->
 <!--    <dubbo:reference interface="com.snowcat.service.ItemCatService" id="itemCatService"/>-->
-    <dubbo:service interface="com.snowcat.service.ContentService" id="contentService"></dubbo:service>
+    <dubbo:reference interface="com.snowcat.service.ContentService" id="contentService"></dubbo:reference>
 
 
 </beans>

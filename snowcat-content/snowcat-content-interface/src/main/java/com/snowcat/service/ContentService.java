@@ -8,9 +8,9 @@ public interface ContentService {
     List<ContentZtreeResult> showList(Long id);
 
     LayuiResult showTable(Integer page, Integer limit, Long categoryId);
-    ElementResult showElement(Long categoryId);
+    List<TbContent> showElement(Long categoryId);
 
-    LayuiResult deleteContent(List<Long> id);
+    LayuiResult deleteContent(List<Long> ids);
 
     LayuiResult addContent(TbContent tbContent);
 }

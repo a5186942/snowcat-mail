@@ -4,13 +4,21 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.snowcat.mapper.TbContentMapper">
-    <delete id="deleteContent">
-        DELETE FROM tbcontent
+    <delete id="deleteContents">
+        delete from tbcontent
         <where>
             <foreach collection="ids" open="id in(" close=")" separator="," item="id">
                 #{id}
             </foreach>
         </where>
     </delete>
+
+
+    <select id="showElement" resultType="com.snowcat.pojo.TbContent">
+        select title,pic,pic2,url from tbcontent
+        <where>
+            categoryId = #{categoryId}
+        </where>
+    </select>
 
 </mapper>
