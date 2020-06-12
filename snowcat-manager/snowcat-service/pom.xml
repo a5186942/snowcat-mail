@@ -110,6 +110,14 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+
     </dependencies>
 </project>
 

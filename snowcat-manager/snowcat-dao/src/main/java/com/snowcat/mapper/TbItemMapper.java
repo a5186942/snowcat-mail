@@ -1,6 +1,7 @@
 package com.snowcat.mapper;
 
 
+import com.snowcat.pojo.SearchItemResult;
 import com.snowcat.pojo.TbItem;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -33,4 +34,6 @@ public interface TbItemMapper {
 
 
     int addItem(TbItem tbItem);
+
+    List<SearchItemResult> searchItemAll();
 }

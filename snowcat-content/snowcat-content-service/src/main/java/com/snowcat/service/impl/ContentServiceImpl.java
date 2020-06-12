@@ -9,12 +9,14 @@ import com.snowcat.pojo.TbContent;
 import com.snowcat.service.ContentService;
 import com.snowcat.service.JedisClient;
 import com.snowcat.utils.JsonUtils;
+import com.snowcat.utils.RandomNum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class ContentServiceImpl implements ContentService {
@@ -26,6 +28,8 @@ public class ContentServiceImpl implements ContentService {
 
     @Autowired
     JedisClient jedisClient;
+
+
 
     @Override
     public List<ContentZtreeResult> showList(Long id) {
@@ -69,7 +73,9 @@ public class ContentServiceImpl implements ContentService {
             return layuiResult;
         }
         layuiResult.setMsg("删除成功");
-        jedisClient.hdel("CONTENT_KEY",ids.toString());
+
+        //删除缓存中的数据
+        jedisClient.del(ids.toString());
 
         return layuiResult;
 
@@ -80,20 +86,31 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public List<TbContent> showElement(Long categoryId) {
 
-        String key = jedisClient.hget("CONTENT_KEY", categoryId + "");
+        String key = jedisClient.get(categoryId + "");
         if(key!=null&&key!=""){
             List<TbContent> list = JsonUtils.jsonToList(key, TbContent.class);
+            System.out.println("查询缓存");
 
             return list;
 
 
         }
         List<TbContent> list = tbContentMapper.showElement(categoryId);
+        System.out.println("查询数据库");
 
+        //如果数据库查询不到数据
+        if(list==null||list.size()==0){
+            jedisClient.set(categoryId+"C"," '空'");
+            jedisClient.expire(categoryId+"C", RandomNum.randomNum()*60*60);
+            System.out.println("未查询到数据，设置数据为空");
 
-        jedisClient.hset("CONTENT_KEY",categoryId+"",JsonUtils.objectToJson(list));
+        }else {
+            jedisClient.set(categoryId + "C", JsonUtils.objectToJson(list));
+            jedisClient.expire(categoryId+"C",RandomNum.randomNum()*60*60);
+            System.out.println("查询到数据，设置到缓存中");
+        }
 
-
+        System.out.println(key);
         return list;
     }
 
@@ -103,6 +120,8 @@ public class ContentServiceImpl implements ContentService {
         if(tbContent==null){
             return LayuiResult.build(500,"增加失败");
         }
+
+
         tbContent.setCreated(new Date());
         tbContent.setUpdated(new Date());
         int count = tbContentMapper.addContent(tbContent);
@@ -110,7 +129,16 @@ public class ContentServiceImpl implements ContentService {
         if(count <= 0){
             return LayuiResult.build(500,"添加失败");
         }
-        jedisClient.hdel("CONTENT_KEY",tbContent.getCategoryId().toString());
+
+        //检查缓存中是否有相关数据
+        String key = jedisClient.get(tbContent.getCategoryId() + "C");
+        if(key!=null&&key!=""){
+            jedisClient.set(tbContent.getCategoryId()+"C",JsonUtils.objectToJson(tbContent));
+            jedisClient.expire(tbContent.getContent()+"C",RandomNum.randomNum()*60*60);
+        }else {
+
+            jedisClient.del(tbContent.getCategoryId().toString());
+        }
         return LayuiResult.build(200,"增加成功");
 
 

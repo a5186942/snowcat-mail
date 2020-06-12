@@ -7,6 +7,14 @@ public class ExecuteResult implements Serializable {
     private String msg;
     private Object data;
 
+    public static ExecuteResult Ok(){
+        ExecuteResult executeResult = new ExecuteResult();
+        executeResult.setData(null);
+        executeResult.setStatus(0);
+        executeResult.setMsg("");
+        return executeResult;
+    }
+
     public ExecuteResult() {
     }
 

@@ -13,4 +13,5 @@ public interface ContentService {
     LayuiResult deleteContent(List<Long> ids);
 
     LayuiResult addContent(TbContent tbContent);
+
 }

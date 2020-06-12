@@ -27,7 +27,8 @@
     <mvc:resources mapping="/js/**" location="/js/"></mvc:resources>
     <mvc:resources mapping="/kindeditor/**" location="/kindeditor/"></mvc:resources>
     <mvc:resources mapping="/layui/**" location="/layui/"></mvc:resources>
-    <dubbo:reference interface="com.snowcat.service.ContentService" id="contentService"></dubbo:reference>
+    <dubbo:reference interface="com.snowcat.service.ContentService" id="contentServiceImpl"></dubbo:reference>
+    <dubbo:reference interface="com.snowcat.search.service.ItemSearchService" id="itemSearchServiceImpl" timeout="360000"></dubbo:reference>
 
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
