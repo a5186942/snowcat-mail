@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class SearchItemResult implements Serializable {
 
-    private Long id;
+    private String id;
     private String title;
     private String sellPoint;
     private Long price;
@@ -12,10 +12,11 @@ public class SearchItemResult implements Serializable {
     private String categoryName;
     private String itemDesc;
 
+
     @Override
     public String toString() {
         return "SearchItemResult{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", sellPoint='" + sellPoint + '\'' +
                 ", price=" + price +
@@ -24,12 +25,19 @@ public class SearchItemResult implements Serializable {
                 ", itemDesc='" + itemDesc + '\'' +
                 '}';
     }
+    public String getImages(){
+        if(image!=null&&!"".equals(image)){
+            String[] https = image.split("http");
+            return "http"+https[1];
+        }
+        return null;
+    }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

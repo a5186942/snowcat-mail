@@ -89,25 +89,25 @@ public class ContentServiceImpl implements ContentService {
         String key = jedisClient.get(categoryId + "");
         if(key!=null&&key!=""){
             List<TbContent> list = JsonUtils.jsonToList(key, TbContent.class);
-            System.out.println("查询缓存");
+//            System.out.println("查询缓存");
 
             return list;
 
 
         }
         List<TbContent> list = tbContentMapper.showElement(categoryId);
-        System.out.println("查询数据库");
+//        System.out.println("查询数据库");
 
         //如果数据库查询不到数据
         if(list==null||list.size()==0){
             jedisClient.set(categoryId+"C"," '空'");
             jedisClient.expire(categoryId+"C", RandomNum.randomNum()*60*60);
-            System.out.println("未查询到数据，设置数据为空");
+//            System.out.println("未查询到数据，设置数据为空");
 
         }else {
             jedisClient.set(categoryId + "C", JsonUtils.objectToJson(list));
             jedisClient.expire(categoryId+"C",RandomNum.randomNum()*60*60);
-            System.out.println("查询到数据，设置到缓存中");
+//            System.out.println("查询到数据，设置到缓存中");
         }
 
         System.out.println(key);

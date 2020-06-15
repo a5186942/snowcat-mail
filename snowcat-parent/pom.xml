@@ -15,6 +15,7 @@
         <module>../snowcat-portal-web</module>
         <module>../snowcat-content</module>
         <module>../snowcat-search</module>
+        <module>../snowcat-search-web</module>
     </modules>
     <properties>
         <junit.version>4.12</junit.version>
