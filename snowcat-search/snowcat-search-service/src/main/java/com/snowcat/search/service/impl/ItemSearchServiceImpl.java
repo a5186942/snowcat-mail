@@ -74,7 +74,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             solrQuery.set("df","item_keywords");
             solrQuery.setHighlight(true);
             solrQuery.addHighlightField("item_title");
-            solrQuery.setHighlightSimplePre("<font style ='color:red' ");
+            solrQuery.setHighlightSimplePre("<font style ='color:red'>");
             solrQuery.setHighlightSimplePost("</font>");
             solrQuery.setStart((page-1)*60);
             solrQuery.setRows(60);

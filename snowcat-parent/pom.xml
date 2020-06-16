@@ -16,6 +16,8 @@
         <module>../snowcat-content</module>
         <module>../snowcat-search</module>
         <module>../snowcat-search-web</module>
+        <module>../snowcat-item-web</module>
+        <module>../snowcat-item</module>
     </modules>
     <properties>
         <junit.version>4.12</junit.version>

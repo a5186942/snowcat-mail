@@ -20,4 +20,10 @@ public class ItemDescServiceImpl implements ItemDescService {
         return tbItemDescMapper.addItemDesc(tbItemDesc);
 
     }
+
+    @Override
+    public TbItemDesc findItemDescById(Long id) {
+
+        return tbItemDescMapper.findItemDescById(id);
+    }
 }
