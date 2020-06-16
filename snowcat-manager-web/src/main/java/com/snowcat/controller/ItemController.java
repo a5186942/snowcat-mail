@@ -1,8 +1,12 @@
 package com.snowcat.controller;
 
 import com.snowcat.pojo.*;
+import com.snowcat.service.ItemDescService;
 import com.snowcat.service.ItemService;
+import com.snowcat.utils.IDUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +19,10 @@ import java.util.List;
 public class ItemController {
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private ItemDescService itemDescService;
+
     @RequestMapping("/{itemId}")
     @ResponseBody
     public TbItem findTbItem(@PathVariable Long itemId){
@@ -74,9 +82,28 @@ public class ItemController {
 
     @RequestMapping("/addItem")
     @ResponseBody
-    public ExecuteResult addItem(TbItem tbItem){
-        ExecuteResult executeResult =  itemService.addItem(tbItem);
-        return executeResult;
+    public ExecuteResult addItem(TbItemAdd tbItemAdd){
+        TbItem tbItem = new TbItem();
+        TbItemDesc tbItemDesc = new TbItemDesc();
+        BeanUtils.copyProperties(tbItemAdd,tbItem);
+        BeanUtils.copyProperties(tbItemAdd,tbItemDesc);
+        long itemId = IDUtils.genItemId();
+        tbItem.setId(itemId);
+        tbItemDesc.setItemId(itemId);
+
+        Integer count1 =  itemService.addItem(tbItem);
+        int count2 = itemDescService.addItemDesc(tbItemDesc);
+
+
+
+        if(count1<=0||count2<=0){
+            return ExecuteResult.build(400,"添加失败");
+        }
+
+
+
+        return ExecuteResult.build(200,"添加成功");
+
     }
 
 }

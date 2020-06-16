@@ -2,13 +2,17 @@ package com.snowcat.service.impl;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.snowcat.mapper.TbItemDescMapper;
 import com.snowcat.mapper.TbItemMapper;
 import com.snowcat.pojo.*;
 import com.snowcat.service.ItemService;
 import com.snowcat.utils.IDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
+import javax.jms.*;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,6 +25,16 @@ import java.util.Properties;
 public class ItemServiceImpl implements ItemService {
     @Autowired
     private TbItemMapper tbItemMapper;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @Autowired
+    private Destination destination;
+
+    @Autowired
+    private TbItemDescMapper tbItemDescMapper;
+
     @Override
     public TbItem findTbItemById(Long itemId) {
 
@@ -184,18 +198,34 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ExecuteResult addItem(TbItem tbItem) {
-        tbItem.setCreated(new Date());
-        tbItem.setUpdated(new Date());
+    public Integer addItem(TbItem tbItem) {
+        Date date = new Date();
+        tbItem.setCreated(date);
+        tbItem.setUpdated(date);
         tbItem.setStatus((byte)1);
-        long itemId = IDUtils.genItemId();
-        tbItem.setId(itemId);
-        int count = tbItemMapper.addItem(tbItem);
 
-        if(count<=0){
-            return ExecuteResult.build(400,"添加失败");
+
+        int i = tbItemMapper.addItem(tbItem);
+        if(i>0) {
+            jmsTemplate.send(destination, new MessageCreator() {
+                @Override
+                public Message createMessage(Session session) throws JMSException {
+                    TextMessage textMessage = session.createTextMessage();
+                    textMessage.setText(tbItem.getId() + "");
+                    System.out.println(tbItem.getId());
+                    return textMessage;
+                }
+            });
+
+
         }
-        return ExecuteResult.build(200,"添加成功");
+
+        return i;
+
+
+
+
+
 
 
 

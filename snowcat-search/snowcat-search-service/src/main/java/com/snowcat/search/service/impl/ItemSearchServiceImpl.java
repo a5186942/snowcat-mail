@@ -33,6 +33,9 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     private SolrServer solrServer;
 
 
+
+
+
     @Override
     public ExecuteResult importSolr() {
 
@@ -122,6 +125,29 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         return null;
     }
 
+    @Override
+    public void addSearchItem(SearchItemResult itemResult) {
+
+        try {
+            SolrInputDocument document = new SolrInputDocument();
+            document.addField("id", itemResult.getId());
+            document.addField("item_title", itemResult.getTitle());
+            document.addField("item_sell_point", itemResult.getSellPoint());
+            document.addField("item_price", itemResult.getPrice());
+            document.addField("item_image", itemResult.getImage());
+            document.addField("item_category_name", itemResult.getCategoryName());
+            document.addField("item_desc", itemResult.getItemDesc());
+            solrServer.add(document);
+            System.out.println("添加成功");
+            solrServer.commit();
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
 
 }

@@ -12,4 +12,6 @@ public interface ItemSearchService {
     ExecuteResult importSolr();
 
     SearchResult search(String query,Integer page);
+
+    void addSearchItem(SearchItemResult itemResult);
 }

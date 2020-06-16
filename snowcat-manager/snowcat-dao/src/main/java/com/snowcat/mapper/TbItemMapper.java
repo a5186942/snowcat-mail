@@ -36,4 +36,6 @@ public interface TbItemMapper {
     int addItem(TbItem tbItem);
 
     List<SearchItemResult> searchItemAll();
+
+    SearchItemResult getItemById(@Param("itemId") Long itemId);
 }

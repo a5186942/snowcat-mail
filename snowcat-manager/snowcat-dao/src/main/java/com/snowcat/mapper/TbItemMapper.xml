@@ -54,6 +54,7 @@
 
     <insert id="addItem">
         insert into tbitem (id,cId,title,sellpoint,price,num,barcode,image,status,created,updated) values (#{id},#{cId},#{title},#{sellPoint},#{price},#{num},#{barcode},#{image},#{status},#{created},#{updated})
+
     </insert>
     
     <select id="searchItemAll" resultType="com.snowcat.pojo.SearchItemResult">
@@ -77,6 +78,30 @@ ON
 	a.id=c.itemId
 WHERE
 	a.`status` = 1;
+
+    </select>
+
+    <select id="getItemById" resultType="com.snowcat.pojo.SearchItemResult">
+        SELECT
+	a.id,
+	a.title,
+	a.sellPoint,
+	a.price,
+	a.image,
+	b.`name` categoryName,
+	c.itemDesc
+FROM
+	tbitem a
+LEFT JOIN
+	tbitemcat b
+ON
+	a.cid=b.id
+LEFT JOIN
+	tbitemdesc c
+ON
+	a.id=c.itemId
+where
+    a.id=#{itemId}
 
     </select>
 

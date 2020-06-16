@@ -77,7 +77,59 @@ http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubb
 
     <dubbo:service interface="com.snowcat.search.service.ItemSearchService" ref="itemSearchServiceImpl" timeout="360000"></dubbo:service>
 
-<!--    <dubbo:service interface="com.snowcat.service.ItemService" ref="itemServiceImpl"/>-->
+
+
+    <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.17.100:61616" />
+    </bean>
+
+    <bean id="connectionFactory"
+          class="org.springframework.jms.connection.SingleConnectionFactory">
+        <!-- 目标ConnectionFactory对应真实的可以产生JMS Connection的ConnectionFactory -->
+        <property name="targetConnectionFactory" ref="targetConnectionFactory" />
+    </bean>
+
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <!-- 这个connectionFactory对应的是我们定义的Spring提供的那个ConnectionFactory对象 -->
+        <property name="connectionFactory" ref="connectionFactory" />
+    </bean>
+    <!--    <bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">-->
+    <!--        <constructor-arg>-->
+    <!--            <value>spring-queue</value>-->
+    <!--        </constructor-arg>-->
+    <!--    </bean>-->
+
+
+    <bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="addItem" />
+    </bean>
+    <bean id="myMessageListener" class="com.snowcat.search.listener.MyMessageListener"></bean>
+
+    <!-- 消息监听容器 -->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="destination" ref="topicDestination" />
+        <property name="messageListener" ref="myMessageListener" />
+    </bean>
+
+
+
+
+
+
+    <!--    <bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">-->
+<!--        <constructor-arg>-->
+<!--            <value>spring-queue</value>-->
+<!--        </constructor-arg>-->
+<!--    </bean>-->
+    <!--这个是主题目的地，一对多的 -->
+
+
+
+
+
+    <!--    <dubbo:service interface="com.snowcat.service.ItemService" ref="itemServiceImpl"/>-->
 <!--    <dubbo:service interface="com.snowcat.service.ItemCatService" ref="itemCatServiceImpl"/>-->
 <!--    <dubbo:service interface="com.snowcat.service.ContentService" ref="contentServiceImpl"></dubbo:service>-->
     <!-- jedis连接池对象-->
