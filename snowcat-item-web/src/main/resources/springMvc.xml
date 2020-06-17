@@ -50,6 +50,8 @@
         <property name="maxUploadSize" value="5242880"></property>
     </bean>
 
+    <dubbo:reference interface="com.snowcat.item.service.ItemParamService" id="itemParamService"></dubbo:reference>
+
 
 </beans>
 

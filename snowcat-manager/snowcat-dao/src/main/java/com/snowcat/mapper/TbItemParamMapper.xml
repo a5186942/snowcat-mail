@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snowcat.mapper.TbItemParamMapper">
+
+
+    <select id="showItemParam" resultMap="result">
+    SELECT
+    a.itemId,a.paramId,a.paramValue,
+    b.`id` bId,b.paramName,b.groupId,
+    c.`id`cId,c.groupName,c.itemCatId
+    FROM tbitemparamkey b
+    INNER JOIN tbitemparamvalue a
+    on b.id = a.paramId
+    INNER JOIN tbitemparamgroup c
+    on b.groupId = c.id
+    where a.itemId = #{id}
+</select>
+
+    <resultMap id="result" type="com.snowcat.pojo.ItemParamGroup">
+        <id property="id" column="cId"></id>
+        <result property="groupName" column="groupName"></result>
+        <result property="itemCatId" column="itemCatId"></result>
+
+        <collection property="paramKeyList" ofType="com.snowcat.pojo.ItemParamKey">
+            <id property="groupId" column="groupId"></id>
+            <result property="id" column="bId"></result>
+            <result property="paramName" column="paramName"></result>
+
+            <association property="itemParamValue" javaType="com.snowcat.pojo.ItemParamValue">
+                <id property="itemId" column="itemId"></id>
+                <id property="paramId" column="paramId"></id>
+                <result property="paramValue" column="paramValue"></result>
+            </association>
+        </collection>
+    </resultMap>
+</mapper>

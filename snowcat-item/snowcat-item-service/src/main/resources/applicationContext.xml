@@ -37,7 +37,7 @@ http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubb
     </bean>
 
     <!--扫描service 层的 注解-->
-    <context:component-scan base-package="com.snowcat.service"></context:component-scan>
+    <context:component-scan base-package="com.snowcat.item.service.impl"></context:component-scan>
 
     <!-- 事务管理器 -->
     <bean id="transactionManager"
@@ -70,7 +70,7 @@ http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubb
     <dubbo:registry protocol="zookeeper"
                     address="192.168.17.100:2181" />
     <dubbo:protocol name="dubbo" port="20883" />
-
+    <dubbo:service interface="com.snowcat.item.service.ItemParamService" ref="itemParamServiceImpl" />
 
 
 <!--    <dubbo:service interface="com.snowcat.service.ContentService" ref="contentServiceImpl"></dubbo:service>-->
