@@ -35,6 +35,9 @@ public class ExecuteResult implements Serializable {
     public static ExecuteResult build(Integer status,String msg){
             return new ExecuteResult(status,msg,null);
     }
+    public static ExecuteResult build(Integer status,String msg,Object data){
+        return new ExecuteResult(status,msg,data);
+    }
 
     public int getStatus() {
         return status;

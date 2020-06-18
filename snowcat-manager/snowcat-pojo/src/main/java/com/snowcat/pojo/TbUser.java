@@ -18,6 +18,22 @@ public class TbUser implements Serializable{
 
     private Date updated;
 
+    private Integer isLog;
+
+	@Override
+	public String toString() {
+		return "TbUser{" +
+				"id=" + id +
+				", userName='" + userName + '\'' +
+				", passWord='" + passWord + '\'' +
+				", phone='" + phone + '\'' +
+				", email='" + email + '\'' +
+				", created=" + created +
+				", updated=" + updated +
+				", isLog=" + isLog +
+				'}';
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -74,11 +90,11 @@ public class TbUser implements Serializable{
 		this.updated = updated;
 	}
 
-	@Override
-	public String toString() {
-		return "TbUser [id=" + id + ", userName=" + userName + ", passWord=" + passWord + ", phone=" + phone
-				+ ", email=" + email + ", created=" + created + ", updated=" + updated + "]";
+	public Integer getIsLog() {
+		return isLog;
 	}
 
-   
+	public void setIsLog(Integer isLog) {
+		this.isLog = isLog;
+	}
 }

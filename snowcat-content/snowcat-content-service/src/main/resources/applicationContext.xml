@@ -79,6 +79,11 @@ http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubb
 <!--    <dubbo:service interface="ItemService" ref="itemServiceImpl"/>-->
 <!--    <dubbo:service interface="ItemCatService" ref="itemCatServiceImpl"/>-->
 
+    <!-- jedis连接池对象-->
+
+
+
+
 
 
 </beans>

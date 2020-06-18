@@ -198,7 +198,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Integer addItem(TbItem tbItem) {
+    public Integer addItem(final TbItem tbItem) {
         Date date = new Date();
         tbItem.setCreated(date);
         tbItem.setUpdated(date);
