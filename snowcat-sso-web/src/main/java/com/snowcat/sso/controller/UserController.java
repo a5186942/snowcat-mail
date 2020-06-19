@@ -67,5 +67,16 @@ public class UserController {
 
     }
 
+    @RequestMapping("/logout/{token}")
+    @ResponseBody
+
+    public String logout(@PathVariable("token") String token,String callback){
+        ExecuteResult result = checkService.logout(token);
+        if(callback!=null){
+            return callback+"("+JsonUtils.objectToJson(result)+");";
+        }
+        return JsonUtils.objectToJson(result);
+    }
+
 
 }

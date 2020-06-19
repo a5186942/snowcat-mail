@@ -26,4 +26,7 @@ public interface TbUserMapper {
 
     @Update("update tbuser set isLog=1 where userName=#{userName}")
     void updateLog(String userName);
+
+    @Update("update tbuser set isLog=0")
+    void updateAllLog();
 }

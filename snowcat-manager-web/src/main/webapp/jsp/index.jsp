@@ -133,8 +133,8 @@ body, html, #allmap {
 									</div>
 								</div>
 								<div class="layui-card-body">
-									<span style="font-size: 36px; color: #676767">99999</span></br> </br> <span
-										style="color: #676767">总访问量</span> <i style="float: right;"
+									<span style="font-size: 36px; color: #676767" id="dailyCount">99999</span></br> </br> <span
+										style="color: #676767">日活</span> <i style="float: right;"
 										class="layui-icon layui-icon-flag"></i>
 								</div>
 							</div>

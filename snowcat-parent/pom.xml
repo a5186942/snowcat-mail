@@ -20,6 +20,7 @@
         <module>../snowcat-item</module>
         <module>../snowcat-sso</module>
         <module>../snowcat-sso-web</module>
+        <module>../snowcat-cart-web</module>
     </modules>
     <properties>
         <junit.version>4.12</junit.version>

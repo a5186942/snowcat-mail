@@ -13,4 +13,6 @@ public interface CheckService {
 
 
     ExecuteResult checkToken(String token);
+
+    ExecuteResult logout(String token);
 }

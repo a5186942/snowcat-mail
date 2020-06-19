@@ -7,6 +7,7 @@ import com.snowcat.sso.service.CheckService;
 import com.snowcat.sso.service.JedisClient;
 import com.snowcat.utils.IDUtils;
 import com.snowcat.utils.JsonUtils;
+import com.snowcat.utils.RandomNum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,7 @@ public class CheckServiceImpl implements CheckService {
 
 
     }
+
 
     @Override
     public ExecuteResult register(TbUser tbUser) {
@@ -155,6 +157,15 @@ public class CheckServiceImpl implements CheckService {
 
 
 
+//        校验是否是新登入用户，缓存加1
+
+        if(user.getIsLog()==0){
+            jedisClient.incr("userDailyCount");
+            jedisClient.expire("userDailyCount", 86400000);
+        }
+
+
+
 //        更改登录状态
         if(user.getIsLog()==0){
             tbUserMapper.updateLog(userName);
@@ -193,6 +204,17 @@ public class CheckServiceImpl implements CheckService {
         }
         return ExecuteResult.build(200,"ok",user);
 
+    }
+
+    @Override
+    public ExecuteResult logout(String token) {
+
+        Long del = jedisClient.del(token);
+        if(del<=0){
+            return ExecuteResult.build(400,"登出失败");
+        }else {
+            return ExecuteResult.build(200,"登出成功");
+        }
     }
 
 
