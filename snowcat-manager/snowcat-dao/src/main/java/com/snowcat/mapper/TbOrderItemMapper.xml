@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snowcat.mapper.TbOrderItemMapper">
+    <insert id="create" >
+        insert into tborderitem (id, itemId, orderId, num, title, price, totalFee, picPath) values
+        <foreach collection="orderItems" item="item" open="(" close=")" separator=",">
+            #{item.id}, #{item.itemId}, #{item.orderId}, #{orderItems.num}, #{orderItems.title}, #{orderItems.price}, #{orderItems.totalFee}, #{orderItems,picPath}
+        </foreach>
+    </insert>
+
+</mapper>

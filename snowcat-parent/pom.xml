@@ -21,6 +21,8 @@
         <module>../snowcat-sso</module>
         <module>../snowcat-sso-web</module>
         <module>../snowcat-cart-web</module>
+        <module>../snowcat-order</module>
+        <module>../snowcat-order-web</module>
     </modules>
     <properties>
         <junit.version>4.12</junit.version>
